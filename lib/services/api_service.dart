@@ -36,19 +36,18 @@ class ApiService {
   }
 
   String _getBaseUrl() {
-    // If using a physical Android device, you can connect via Wi-Fi by using your PC's IP.
-    // Ensure you start the backend server with: `uvicorn app.main:app --host 0.0.0.0 --reload`
-    // Alternatively, connect via USB, run `adb reverse tcp:8000 tcp:8000` and use 'http://127.0.0.1:8000'.
-    if (kIsWeb) {
-      return 'http://localhost:8000';
-    }
-    try {
-      if (Platform.isAndroid) {
-        return 'http://192.168.0.237:8000';
-      }
-    } catch (_) {
-      // Platform check can throw on web environments in some configurations
-    }
-    return 'http://127.0.0.1:8000';
+    // Backend is hosted on AWS Lightsail and reachable from anywhere
+    // (mobile data or any Wi-Fi). Nginx reverse-proxies port 80 to the API.
+    const String productionUrl = 'http://13.232.125.72';
+
+    // For local development, uncomment the block below to use a locally-run
+    // backend instead (start it with `uvicorn app.main:app --host 0.0.0.0`).
+    // if (kIsWeb) return 'http://localhost:8000';
+    // try {
+    //   if (Platform.isAndroid) return 'http://192.168.0.237:8000';
+    // } catch (_) {}
+    // return 'http://127.0.0.1:8000';
+
+    return productionUrl;
   }
 }
